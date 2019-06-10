@@ -2,11 +2,10 @@ package com.pinyougou.manager.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import com.pinyougou.page.service.ItemPageService;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goods;
 import com.pinyougou.search.service.ItemSearchService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +29,9 @@ public class GoodsController {
 
 	@Reference
     private ItemSearchService itemSearchService;
+
+	@Reference(timeout = 40000)
+    private ItemPageService itemPageService;
 	/**
 	 * 返回全部列表
 	 * @return
@@ -131,5 +133,11 @@ public class GoodsController {
 	        e.printStackTrace();
 	        return new Result(false,"修改失败");
         }
+    }
+
+    //生成静态页面
+    @RequestMapping("/genHtml")
+    public void genHtml(Long goodsId){
+        itemPageService.genItemHtml(goodsId);
     }
 }
